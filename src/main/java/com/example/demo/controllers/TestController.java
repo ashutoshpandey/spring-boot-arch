@@ -4,6 +4,9 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContext;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,11 +16,16 @@ import com.example.demo.dto.UserCreateDTO;
 import com.example.demo.service.UserService;
 import com.example.demo.exception.BadRequestException;
 
+import java.util.Locale;
+
 @RestController
 @RequestMapping("/test")
 public class TestController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     Logger logger = LoggerFactory.getLogger(TestController.class);
 
@@ -26,6 +34,34 @@ public class TestController {
         if(name != null)
             return "Hello: " + name;
         else {
+            logger.error("Name not provided for saying hello");
+            throw new BadRequestException(Constant.EXCEPTION_MESSAGE_MISSING_ATTRIBUTE, "You need to provide name in path");
+        }
+    }
+
+    @GetMapping("/hello-language")
+    public String getHelloLanguage(
+        @RequestParam(required = false) String name,
+        @RequestHeader(name="Accept-Language", required = false) Locale locale
+    ){
+        if(name != null) {
+            // picks from messages.properties, pass Accept-Language = en/fr in header
+            return messageSource.getMessage("hello.message", null, "Hello", locale) + " " + name;
+        }else {
+            logger.error("Name not provided for saying hello");
+            throw new BadRequestException(Constant.EXCEPTION_MESSAGE_MISSING_ATTRIBUTE, "You need to provide name in path");
+        }
+    }
+
+    @GetMapping("/hello-language-updated")
+    public String getHelloLanguageUpdated(
+            @RequestParam(required = false) String name
+    ){
+        if(name != null) {
+            // picks from messages.properties, pass Accept-Language = en/fr in header
+            // No need to specify locale from header
+            return messageSource.getMessage("hello.message", null, "Hello", LocaleContextHolder.getLocale()) + " " + name;
+        }else {
             logger.error("Name not provided for saying hello");
             throw new BadRequestException(Constant.EXCEPTION_MESSAGE_MISSING_ATTRIBUTE, "You need to provide name in path");
         }
