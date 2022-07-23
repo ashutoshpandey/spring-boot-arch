@@ -5,7 +5,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
-public class UserCreateDTO {
+public class UserResponseDTO {
     @JsonProperty("email")
     private String email;
 

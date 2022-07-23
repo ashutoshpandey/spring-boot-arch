@@ -1,0 +1,2 @@
+insert into user(id, email, first_name, last_name, user_uuid, password, date_of_birth) values(1, 'first@test.com', 'first', 'test', null, '12345', '2000-1-1');
+insert into user(id, email, first_name, last_name, user_uuid, password, date_of_birth) values(2, 'second@test.com', 'second', 'test', null, '12345', '2000-2-2');

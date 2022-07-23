@@ -1,5 +1,6 @@
 package com.example.demo.exception.handler;
 
+import com.example.demo.exception.RecordNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,14 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request) {
         ExceptionResponse response = new ExceptionResponse(ex.getBindingResult().toString(), request.getDescription(false));
         return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleRecordNotFoundException(
+            RecordNotFoundException ex,
+            WebRequest request){
+        ExceptionResponse response = new ExceptionResponse(ex.getMessage(), request.getDescription(false));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler

@@ -1,7 +1,6 @@
 package com.example.demo.controllers;
 
-import javax.validation.Valid;
-
+import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -9,13 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.model.User;
 import com.example.demo.utility.Constant;
-import com.example.demo.dto.UserCreateDTO;
 import com.example.demo.service.UserService;
 import com.example.demo.exception.BadRequestException;
-
-import java.util.Locale;
 
 @RestController
 @RequestMapping("/test")
@@ -34,7 +29,7 @@ public class TestController {
             return "Hello: " + name;
         else {
             logger.error("Name not provided for saying hello");
-            throw new BadRequestException(Constant.EXCEPTION_MESSAGE_MISSING_ATTRIBUTE, "You need to provide name in path");
+            throw new BadRequestException(Constant.Message.MISSING_ATTRIBUTE, "You need to provide name in path");
         }
     }
 
@@ -48,7 +43,7 @@ public class TestController {
             return messageSource.getMessage("hello.message", null, "Hello", locale) + " " + name;
         }else {
             logger.error("Name not provided for saying hello");
-            throw new BadRequestException(Constant.EXCEPTION_MESSAGE_MISSING_ATTRIBUTE, "You need to provide name in path");
+            throw new BadRequestException(Constant.Message.MISSING_ATTRIBUTE, "You need to provide name in path");
         }
     }
 
@@ -62,13 +57,7 @@ public class TestController {
             return messageSource.getMessage("hello.message", null, "Hello", LocaleContextHolder.getLocale()) + " " + name;
         }else {
             logger.error("Name not provided for saying hello");
-            throw new BadRequestException(Constant.EXCEPTION_MESSAGE_MISSING_ATTRIBUTE, "You need to provide name in path");
+            throw new BadRequestException(Constant.Message.MISSING_ATTRIBUTE, "You need to provide name in path");
         }
-    }
-
-    @PostMapping("/create")
-    public UserCreateDTO create(@RequestBody @Valid User user){
-        logger.info("Creating user");
-        return userService.create(user);
     }
 }

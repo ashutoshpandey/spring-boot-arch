@@ -21,6 +21,8 @@ public class SecurityConfiguration
                 .and()
                 .httpBasic();
 
+        http.headers().frameOptions().disable();
+
         return http.build();
     }
 
